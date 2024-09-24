@@ -3,8 +3,18 @@
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
 'use strict';
 
-var _ = {};
+// Functional library
 
+var _ = {}; 
+
+/***
+  _ = {
+  }
+    typeOf = function
+so _.key = 
+just all a way of creating keys for an object 
+
+ */
 
 /**
 * START OF OUR LIBRARY!
@@ -21,6 +31,10 @@ var _ = {};
 *   _.identity({a: "b"}) === {a: "b"}
 */
 
+_.identity = function(value) {
+    return value;
+
+}
 
 /** _.typeOf
 * Arguments:
@@ -42,6 +56,31 @@ var _ = {};
 * _.typeOf([1,2,3]) -> "array"
 */
 
+_.typeOf = function(value) {
+    if (typeof value === 'string') {
+        return 'string';
+    } if (typeof(value) === 'number') {
+        return 'number';
+    } if (typeof value === 'boolean') {
+        return 'boolean';
+    } if (typeof value === 'function') {
+        return 'function'
+    } if (typeof value === 'undefined') {
+        return 'undefined'
+    }
+    if (typeof value === 'object') {
+        if (Array.isArray(value)) {
+            return 'array';
+        } if (value instanceof Date) {
+            return 'date'
+        } if (value === null) {
+            return 'null';
+        } else {
+            return 'object';
+        }
+    }
+}     
+
 
 /** _.first
 * Arguments:
@@ -61,6 +100,22 @@ var _ = {};
 *   _.first(["a", "b", "c"], 2) -> ["a", "b"]
 */
 
+_.first = function(array, number) {
+    if (!Array.isArray(array) || number < 0) {
+        return []
+    }
+    for (var i = 0; i < array.length; i++) {
+        if (typeof number !== 'number') {
+            return array[0]
+        } if (number > array.length) {
+            return array
+        }
+        else {
+            return array.slice(0, number)
+        }
+        
+    }
+}
 
 /** _.last
 * Arguments:
@@ -80,6 +135,23 @@ var _ = {};
 *   _.last(["a", "b", "c"], 2) -> ["b", "c"]
 */
 
+_.last = function(array, number) {
+    if (!Array.isArray(array) || number < 0) {
+        return []
+    }
+    for (var i = 0; i < array.length; i++) {
+        if (typeof number !== 'number') {
+            return array[array.length - 1]
+        } if (number > array.length) {
+            return array
+        }
+        else {
+            let output =  array.splice(1, number)
+            return output
+        }
+        
+    }
+}
 
 /** _.indexOf
 * Arguments:
@@ -97,6 +169,14 @@ var _ = {};
 *   _.indexOf(["a","b","c"], "d") -> -1
 */
 
+_.indexOf = function (array, value) {
+   if (!array.indexOf(value)) {
+    return -1;
+   } else {
+    return array.indexOf(value)
+   }
+}
+
 
 /** _.contains
 * Arguments:
@@ -113,6 +193,13 @@ var _ = {};
 *   _.contains([1,"two", 3.14], "two") -> true
 */
 
+_.contains = function(array, value) {
+    if (array.includes(value)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 /** _.each
 * Arguments:
@@ -130,6 +217,17 @@ var _ = {};
 *      -> should log "a" "b" "c" to the console
 */
 
+_.each = function(collection, func) {
+    if (Array.isArray(collection)) {
+        for (var i = 0; i < collection.length; i++) {
+            console.log(func(collection[i], i, collection));
+        }
+    } else {
+        for (var key in collection) {
+            console.log(func(collection[key], key, collection));
+        }
+    }
+}
 
 /** _.unique
 * Arguments:
@@ -141,6 +239,12 @@ var _ = {};
 *   _.unique([1,2,2,4,5,6,5,2]) -> [1,2,4,5,6]
 */
 
+_.unique = function (array) {
+    var output = array.filter(function(value, index) {
+        return array.indexOf(value) == index
+    })
+    return output
+}
 
 /** _.filter
 * Arguments:
@@ -208,6 +312,31 @@ var _ = {};
 * Examples:
 *   _.map([1,2,3,4], function(e){return e * 2}) -> [2,4,6,8]
 */
+
+_.map = function(collection, func) {
+    const output = [];
+    // if array
+    if (Array.isArray(collection)) {
+        for (var i = 0; i < collection.length; i++) {
+            output.push(func(collection[i], i, collection));
+        }
+    } else { // else it's an object
+        // loop over collection
+        for (let key in collection){
+            output.push(func(collection[key], key, collection))
+        }
+    }
+
+
+    return output;
+}
+
+
+
+
+
+
+
 
 
 /** _.pluck
