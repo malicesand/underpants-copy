@@ -262,6 +262,16 @@ _.unique = function (array) {
 *   use _.each in your implementation
 */
 
+_.filter = function(array, func){
+    var output = [];
+    for (var i = 0; i < array.length; i++) {
+        if (func(array[i], i, array) === true) {
+            output.push(array[i]);
+        }
+    }
+    return output
+}
+
 
 /** _.reject
 * Arguments:
@@ -276,6 +286,15 @@ _.unique = function (array) {
 *   _.reject([1,2,3,4,5], function(e){return e%2 === 0}) -> [1,3,5]
 */
 
+_.reject = function(array, func){
+    var output = [];
+    for (var i = 0; i < array.length; i++) {
+        if (func(array[i], i, array) === false) {
+            output.push(array[i]);
+        }
+    }
+    return output 
+}
 
 /** _.partition
 * Arguments:
@@ -296,6 +315,21 @@ _.unique = function (array) {
 }
 */
 
+_.partition = function(array, func){
+    var subArr1 = [];
+    var subArr2 = [];
+    var output = [[], []];
+    for (var i = 0; i < array.length; i++) {
+        if (func(array[i], i, array) === true) {
+            subArr1.push(array[i]);
+        } if (func(array[i], i, array) === false) {
+            subArr2.push(array[i]);
+        }
+    }
+    output[0] = subArr1;
+    output[1] = subArr2;
+    return output
+}
 
 /** _.map
 * Arguments:
@@ -326,17 +360,8 @@ _.map = function(collection, func) {
             output.push(func(collection[key], key, collection))
         }
     }
-
-
     return output;
 }
-
-
-
-
-
-
-
 
 
 /** _.pluck
@@ -350,6 +375,17 @@ _.map = function(collection, func) {
 *   _.pluck([{a: "one"}, {a: "two"}], "a") -> ["one", "two"]
 */
 
+_.pluck = function(array, target) {
+    var output = [];
+    for (var i = 0; i < array.length; i++) {
+        for (var key in array[i]) {
+            if (key === target) {
+                output.push(array[i][target])
+            }
+        }
+    }
+    return output
+}
 
 /** _.every
 * Arguments:
@@ -372,6 +408,55 @@ _.map = function(collection, func) {
 *   _.every([1,2,3], function(e){return e % 2 === 0}) -> false
 */
 
+_.every = function(collection, func) {
+    // if no function
+        // assign function a basic
+    if (Array.isArray(collection)) {// if collection is array
+        if (!func) { // determine if func is NOT truthy
+            for (let i = 0; i < collection.length; i++) {
+                if (!collection[i]){
+                    return false
+                }
+            }       
+            return true
+        } else { // else func was provided
+            for (let i = 0; i < collection.length; i++) {
+                if (func(collection[i], i, collection) === false){ 
+                    return false
+                }
+            }
+            return true
+        }
+    } else { // else it's an object
+        if (!func) { // determine if func is NOT truthy 
+            for (var key in collection) {
+                if (key === false){
+                    return false
+                }
+            }
+            return true
+        } else { //else func was provided
+            for (var key in collection) {
+                if (func(collection[key], key, collection) === false){
+                    return false
+                }
+            }
+            return true
+        }
+    }
+}
+
+
+_.every([1, 2, 3, 4], function(n){ return n % 2 === 0}); // false (because not every time is even)
+_.every([2, 4, 6], function(n){ return n % 2 === 0}); // true (every item is even)
+_.every({ a: 1, b: 2 }, function(n){ return n > 1});// false (not every item is greater than 1)
+_.every({ a: 3, b: 4 }, function(n){ return n > 1}); /// true (every item is greater than 1)
+
+
+_.every([1, 2, 3]); // true (because every item is truthy)
+_.every([1, undefined, 3]); // false (because one item is falsey)
+_.every({ a: 1, b: 2 }); // true (because all of the values are truthy)
+_.every({ a: null, b: 2}); // false (because of the values if falsey)
 
 /** _.some
 * Arguments:
