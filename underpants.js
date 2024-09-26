@@ -363,6 +363,13 @@ _.map = function(collection, func) {
     return output;
 }
 
+// const letters = ['a', 'b', 'c']
+
+// let uppercase = _.map(letters, (.toUpperCase()))
+// //                      collection.         func. but in arrow style
+// console.log(uppercase)
+
+
 
 /** _.pluck
 * Arguments:
@@ -421,10 +428,10 @@ _.every = function(collection, func) {
             return true
         } else { // else func was provided
             for (let i = 0; i < collection.length; i++) {
-                if (func(collection[i], i, collection) === false){ 
+                if (!func(collection[i], i, collection)){ 
                     return false
                 }
-            }
+            }   
             return true
         }
     } else { // else it's an object
@@ -437,7 +444,7 @@ _.every = function(collection, func) {
             return true
         } else { //else func was provided
             for (var key in collection) {
-                if (func(collection[key], key, collection) === false){
+                if (!func(collection[key], key, collection)){
                     return false
                 }
             }
@@ -479,6 +486,43 @@ _.every({ a: null, b: 2}); // false (because of the values if falsey)
 *   _.some([1,2,3], function(e){return e % 2 === 0}) -> true
 */
 
+_.some = function(collection, func) {
+    if (Array.isArray(collection)) {
+        if (!func) {
+            for (var i = 0; i < collection.length; i++) {
+                if (collection[i]) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        } else {
+            for (var i = 0; i < collection.length; i++) {
+                if (func(collection[i], i, collection)) {
+                    return true
+                }
+            }
+            return false
+        }
+    } else { // object
+        if (!func) {
+            for (var key in collection) {
+                if (key) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        } else {
+            for (var key in collection) {
+                if (func(collection[key], key, collection)) {
+                    return true
+                }
+            }
+            return false 
+        }
+    }
+}
 
 /** _.reduce
 * Arguments:
@@ -499,6 +543,27 @@ _.every({ a: null, b: 2}); // false (because of the values if falsey)
 *   _.reduce([1,2,3], function(previousSum, currentValue, currentIndex){ return previousSum + currentValue }, 0) -> 6
 */
 
+_.reduce = function(array, func, seed = 1) {
+    // var result = seed
+    if (!seed) {
+     let result = null
+    //  seed = 1
+     for (var i = 0; i < array.length; i++) {
+
+        result = func(result, array[i], i)
+     }
+     return result
+
+    } if (seed) {
+        let result = seed
+        for (var i = 0; i < array.length; i++) {
+            // var result = seed
+            //   let result = seed;
+            result = func(result, array[i], i);
+        }
+        return result
+    }
+}
 
 /** _.extend
 * Arguments:
@@ -514,6 +579,10 @@ _.every({ a: null, b: 2}); // false (because of the values if falsey)
 *   _.extend(data, {b:"two"}); -> data now equals {a:"one",b:"two"}
 *   _.extend(data, {a:"two"}); -> data now equals {a:"two"}
 */
+
+_.extend = function(param) {
+    Object.assign(param);
+}
 
 //////////////////////////////////////////////////////////////////////
 // DON'T REMOVE THIS CODE ////////////////////////////////////////////
