@@ -551,6 +551,7 @@ _.reduce = function(array, func, seed = 1) {
      for (var i = 0; i < array.length; i++) {
 
         result = func(result, array[i], i)
+    
      }
      return result
 
@@ -564,6 +565,7 @@ _.reduce = function(array, func, seed = 1) {
         return result
     }
 }
+
 
 /** _.extend
 * Arguments:
@@ -580,10 +582,13 @@ _.reduce = function(array, func, seed = 1) {
 *   _.extend(data, {a:"two"}); -> data now equals {a:"two"}
 */
 
-_.extend = function(param) {
-    Object.assign(param);
+_.extend = function(target, ...sources) {
+    return Object.assign(target, ...sources);
 }
 
+
+_.extend({ a: 1 }, { b: 1 }, { c: 1 }); // { a: 1, b: 1, c: 1 }
+//       target.   copyFrom.    copyFrom.
 //////////////////////////////////////////////////////////////////////
 // DON'T REMOVE THIS CODE ////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
